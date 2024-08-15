@@ -16,6 +16,8 @@ class Booking(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     class Meta:
         ordering = ['-created_at']
+    def __str__(self):
+        return self.service.title
     
 class Payment(models.Model):
     booking = models.OneToOneField(Booking, on_delete=models.CASCADE)

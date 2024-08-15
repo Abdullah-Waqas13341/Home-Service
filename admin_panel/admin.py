@@ -5,5 +5,5 @@ class AdminAdmin(admin.ModelAdmin):
     list_display = ['username', 'email']
 @admin.register(AdminAction)
 class AdminActionAdmin(admin.ModelAdmin):
-    list_display = ['admin', 'action', 'created_at']
+    list_display = ['admin','service', 'action', 'created_at']
 # Register your models here.

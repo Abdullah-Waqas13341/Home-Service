@@ -8,6 +8,6 @@ class CategoryAdmin(admin.ModelAdmin):
     list_display = ['name', 'description']
 @admin.register(Service)
 class ServiceAdmin(admin.ModelAdmin):
-    list_display = ['seller', 'category', 'title', 'price', 'status', 'avg_rating', 'created_at', 'updated_at', 'admin_action']
+    list_display = ['seller', 'category', 'title', 'price', 'status', 'avg_rating', 'created_at', 'updated_at']
 
 # Register your models here.
