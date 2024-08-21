@@ -48,12 +48,12 @@ class SignUpForm(UserCreationForm):
             'password1': forms.PasswordInput(attrs={
                 'class': 'form-control custom-input',
                 'placeholder': 'Password',
-                'type': 'password'  # Add this line to specify the input type as 'password'
+                'type': 'password' 
             }),
             'password2': forms.PasswordInput(attrs={
                 'class': 'form-control custom-input',
                 'placeholder': 'Confirm Password',
-                'type': 'password'  # Add this line to specify the input type as 'password'
+                'type': 'password'  
             }),
             'role': forms.Select(attrs={
                 'class': 'form-control custom-input'
@@ -86,24 +86,8 @@ class SignUpForm(UserCreationForm):
             user.save()
         
         return user
-class LoginForm(forms.Form):
-    username = forms.CharField(widget=forms.TextInput(attrs={
-        'class': 'form-control custom-input',
-        'placeholder': 'Username'
-    }))
-    password = forms.CharField(widget=forms.PasswordInput(attrs={
-        'class': 'form-control custom-input',
-        'placeholder': 'Password'
-    }))
-    class LoginForm(forms.Form):
-        username = forms.CharField(widget=forms.TextInput(attrs={
-        'class': 'form-control custom-input',
-        'placeholder': 'Username'
-            }))
-        password = forms.CharField(widget=forms.PasswordInput(attrs={
-        'class': 'form-control custom-input',
-        'placeholder': 'Password'
-            }))
+
+    
     
 
    

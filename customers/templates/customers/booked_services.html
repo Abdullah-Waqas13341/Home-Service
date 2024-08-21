@@ -1,0 +1,79 @@
+{% extends 'customers/base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center text-success mb-4">Booked Services</h2>
+    <table class="table table-striped table-bordered table-hover custom-table">
+        <thead class="thead-light bg-success text-white">
+            <tr>
+                <th>Service</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for booking in bookings %}
+            <tr>
+                <td>{{ booking.service.title }}</td>
+                <td>{{ booking.service_date }}</td>
+                <td>{{ booking.time }}</td>
+                <td>
+                    {% if booking.status == 'Pending' %}
+                    <span class="badge bg-warning text-dark">Pending</span>
+                    {% else %}
+                    <span class="badge bg-success">Paid</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if booking.status == 'Pending' %}
+                    <form action="{% url 'customers:payment_view' booking.id %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-success">Pay Now</button>
+                    </form>
+                    {% else %}
+                    <button class="btn btn-success" disabled>Paid</button>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<style>
+    /* styles.css */
+.custom-table {
+    border: 2px solid #28a745; /* Green border for the entire table */
+    border-radius: 5px; /* Rounded corners for the table */
+}
+
+.custom-table th, .custom-table td {
+    border: 1px solid #28a745; /* Green border for table cells */
+}
+
+.custom-table thead th {
+    background-color: #28a745; /* Green background for table header */
+    color: white; /* White text color */
+    text-align: center;
+    font-weight: bold;
+}
+
+.custom-table tbody tr:hover {
+    background-color: #e9f5e0; /* Light green background on row hover */
+}
+
+.custom-table .btn {
+    transition: background-color 0.3s ease;
+}
+
+.custom-table .btn:hover {
+    background-color: #9fbea6; /* Darker green on button hover */
+}
+
+.custom-table .badge {
+    font-size: 0.9rem; /* Slightly smaller font size for badges */
+}
+
+</style>
+{% endblock %}

@@ -12,22 +12,23 @@ from .forms import CustomAuthenticationForm, SignUpForm
 from django.contrib.auth import logout
 
 MAX_ATTEMPTS = 5
-LOCKOUT_TIME = 5 * 60  # 5 minutes in seconds
+LOCKOUT_TIME = 5 * 60  
 
 
 def custom_logout(request):
     logout(request)
+    print("Logout view called") 
     messages.success(request, "You have successfully logged out.")
-    return redirect('login')  # Redirect to the login page after logout
+    return redirect('core:login')  
 
 def custom_login(request):
     if request.method == 'POST':
         form = CustomAuthenticationForm(request, data=request.POST)
         if form.is_valid():
-            email = form.cleaned_data.get('email')  # Use 'username' to get email input
+            email = form.cleaned_data.get('email')  
             password = form.cleaned_data.get('password')
             
-            # Ensure the email is checked for lockout
+            
             lockout_time = cache.get(f'lockout_time_{email}')
             if lockout_time and timezone.now() < lockout_time:
                 messages.error(request, 'Your account is locked. Please try again later.')
@@ -36,15 +37,15 @@ def custom_login(request):
 
             user = authenticate(request, email=email, password=password)
             if user is not None:
-                # Reset failed attempts on successful login
+           
                 cache.delete(f'failed_attempts_{email}')
                 cache.delete(f'lockout_time_{email}')
 
                 login(request, user)
                 messages.success(request, f"Welcome back, {user.username}!")
-                return redirect('home')
+                return redirect('core:home')
             else:
-                # Handle failed attempts
+               
                 failed_attempts = cache.get(f'failed_attempts_{email}', 0) + 1
                 cache.set(f'failed_attempts_{email}', failed_attempts, LOCKOUT_TIME)
 
@@ -61,32 +62,15 @@ def custom_login(request):
 
     return render(request, 'core/login.html', {'form': form})
 
-
-
-
-
-
-
-
-
-
-def custom_logout(request):
-    logout(request)
-    messages.success(request, "You have been logged out.")
-    return redirect('login')  # Redirect to login page after logging out
-
-
-
-
-
 def signup(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
         if form.is_valid():
             user=form.save()
+            user.backend = 'django.contrib.auth.backends.ModelBackend'
             login(request, user)
             messages.success(request, 'Account created successfully')
-            return redirect('home')
+            return redirect('core:home')
     else:
         form = SignUpForm()
     return render(request, 'core/signup.html', {'form': form})
