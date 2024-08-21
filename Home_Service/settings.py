@@ -17,8 +17,8 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 # settings.py
 
-STRIPE_PUBLISHABLE_KEY = 'your-publishable-key-here'
-STRIPE_SECRET_KEY = 'your-secret-key-here'
+STRIPE_PUBLISHABLE_KEY = 'pk_test_51PqAfOP8PWtTGM6YmTiY4XIdILzmL2kAXcFYnrxBySyitQ6wddB3RznT8bqYshX1NCLptiUkO7RNBFF7O7fROVKc002ARKtIEF'
+STRIPE_SECRET_KEY = 'sk_test_51PqAfOP8PWtTGM6YQyRFsMZBIm4Ikpff06YnftYJzsfwgXzUbSuXVjUeHGrVyAq5PgQ5FHPiPWpmPrxCMoN1Dbu000SK0x1NWL'
 
 
 

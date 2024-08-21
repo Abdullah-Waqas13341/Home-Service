@@ -12,6 +12,7 @@ class RoleBasedRedirectMiddleware:
                 allowed_urls = [
                     reverse('customers:services_list'),
                     reverse('customers:booked_services'),
+                    reverse('customers:payment_success'),
                 ]
 
                 # Check if the URL matches the pattern for payment_view

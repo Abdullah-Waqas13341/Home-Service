@@ -109,7 +109,6 @@ def payment_view(request, booking_id):
                 
                 
                 Payment.objects.create(
-                    user=request.user,
                     amount=amount,
                     stripe_charge_id=charge.id,
                     booking=booking  
@@ -130,7 +129,7 @@ def payment_view(request, booking_id):
     })
 
 def payment_success(request):
-    return render(request, 'payment_success.html')
+    return render(request, 'customers/payment_success.html')
 
 
 
