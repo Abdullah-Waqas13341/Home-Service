@@ -12,13 +12,26 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+from decouple import config
+import environ
+
+# Initialize environment variables
+env = environ.Env()
+
+# Take environment variables from the .env file
+environ.Env.read_env()
+
+# Configure maximum login attempts and lockout time
+MAX_LOGIN_ATTEMPTS = env.int('MAX_LOGIN_ATTEMPTS', default=5)  # Default is 5
+LOCKOUT_TIME = env.int('LOCKOUT_TIME', default=300)  # Default is 300 seconds (5 minutes)
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 # settings.py
 
-STRIPE_PUBLISHABLE_KEY = 'pk_test_51PqAfOP8PWtTGM6YmTiY4XIdILzmL2kAXcFYnrxBySyitQ6wddB3RznT8bqYshX1NCLptiUkO7RNBFF7O7fROVKc002ARKtIEF'
-STRIPE_SECRET_KEY = 'sk_test_51PqAfOP8PWtTGM6YQyRFsMZBIm4Ikpff06YnftYJzsfwgXzUbSuXVjUeHGrVyAq5PgQ5FHPiPWpmPrxCMoN1Dbu000SK0x1NWL'
+STRIPE_PUBLISHABLE_KEY = config('STRIPE_PUBLISHABLE_KEY')
+STRIPE_SECRET_KEY = config('STRIPE_SECRET_KEY')
 
 
 
@@ -26,10 +39,10 @@ STRIPE_SECRET_KEY = 'sk_test_51PqAfOP8PWtTGM6YQyRFsMZBIm4Ikpff06YnftYJzsfwgXzUbS
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-ix%40p7m%x0-=h(kpt$vk23dktce5#ptz%ho@+_+4zq9-vq_43'
+SECRET_KEY =config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', default=False, cast=bool)
 
 ALLOWED_HOSTS = []
 AUTHENTICATION_BACKENDS = [

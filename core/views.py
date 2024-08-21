@@ -1,18 +1,14 @@
 # Create your views here.
-from django.shortcuts import render
 from django.contrib.auth import authenticate, login
-from django.contrib.auth.models import update_last_login
-from django.contrib.auth.signals import user_logged_in
-from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.utils import timezone
 from django.core.cache import cache
 from .forms import CustomAuthenticationForm, SignUpForm
 from django.contrib.auth import logout
+from django.conf import settings
 
-MAX_ATTEMPTS = 5
-LOCKOUT_TIME = 5 * 60  
+
 
 
 def custom_logout(request):
@@ -47,11 +43,11 @@ def custom_login(request):
             else:
                
                 failed_attempts = cache.get(f'failed_attempts_{email}', 0) + 1
-                cache.set(f'failed_attempts_{email}', failed_attempts, LOCKOUT_TIME)
+                cache.set(f'failed_attempts_{email}', failed_attempts, settings.LOCKOUT_TIME)
 
-                if failed_attempts >= MAX_ATTEMPTS:
-                    lockout_time = timezone.now() + timezone.timedelta(seconds=LOCKOUT_TIME)
-                    cache.set(f'lockout_time_{email}', lockout_time, LOCKOUT_TIME)
+                if failed_attempts >= settings.MAX_ATTEMPTS:
+                    lockout_time = timezone.now() + timezone.timedelta(seconds=settings.LOCKOUT_TIME)
+                    cache.set(f'lockout_time_{email}', lockout_time, settings.LOCKOUT_TIME)
                     messages.error(request, 'Account locked due to too many failed attempts. Try again in 5 minutes.')
                 else:
                     messages.error(request, 'Invalid email or password.')

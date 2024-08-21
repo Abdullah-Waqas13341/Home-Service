@@ -34,9 +34,9 @@ class Payment(models.Model):
     ]
     payment_status = models.CharField(max_length=20, default='Pending', choices=PAYMENT_STATUS_CHOICES)
     PAYMENT_MODE_CHOICES = [
-        ('Cash', 'Cash'),
+ \
         ('Card', 'Card'),
-        ('Net Banking', 'Net Banking'),
+       
     ]
     payment_mode = models.CharField(max_length=20, default='Cash', choices=PAYMENT_MODE_CHOICES)
     updated_at = models.DateTimeField(auto_now=True)
