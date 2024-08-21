@@ -1,0 +1,24 @@
+<!-- customer/templates/customer/completed_services.html -->
+
+{% extends "customer/base.html" %}
+
+{% block title %}Completed Services{% endblock %}
+
+{% block content %}
+<h2 class="text-success">Completed Services</h2>
+<div class="row">
+    {% for booking in bookings %}
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ booking.service.title }}</h5>
+                    <p class="card-text">Status: {{ booking.status }}</p>
+                    <a href="{% url 'booking_detail' booking.id %}" class="btn btn-success">View Details</a>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <p>No completed services.</p>
+    {% endfor %}
+</div>
+{% endblock %}
