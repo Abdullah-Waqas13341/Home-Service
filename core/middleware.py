@@ -24,11 +24,12 @@ class RoleBasedRedirectMiddleware:
                     return redirect('customers:services_list')
             elif request.user.role == 'seller':
                 allowed_urls = [
-                    reverse('seller:home'),
+                    reverse('seller:services'),
+                    reverse('seller:post_service'),
                 ]
 
                 if not any(request.path.startswith(url) for url in allowed_urls):
-                    return redirect('seller:home')
+                    return redirect('seller:services')
         
         response = self.get_response(request)
         return response
