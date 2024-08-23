@@ -1,0 +1,33 @@
+{% extends 'sellers/base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center text-success mb-4">Booked Services</h2>
+    <table class="table table-striped table-bordered table-hover custom-table">
+        <thead class="thead-light bg-success text-white">
+            <tr>
+                <th>Service</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Address</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for booking in bookings %}
+            <tr>
+                <td>{{ booking.service.title }}</td>
+                <td>{{ booking.service_date }}</td>
+                <td>{{ booking.time }}</td>
+                <td>{{ booking.address }}</td>
+                <td>{{ booking.status }}</td>
+                <td>
+                    <a href="{% url 'sellers:accept_booking' booking.id %}" class="btn btn-success btn-sm">Accept</a>
+                    <a href="{% url 'sellers:decline_booking' booking.id %}" class="btn btn-danger btn-sm">Decline</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

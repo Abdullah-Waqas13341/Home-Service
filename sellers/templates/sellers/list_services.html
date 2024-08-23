@@ -1,0 +1,55 @@
+{% extends 'sellers/base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="table-container">
+        <h2 class="text-center">Your Posted Services</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Admin Comments</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for service in services %}
+                <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td>{{ service.title }}</td>
+                    <td>{{ service.category.name }}</td>
+                    <td>{{ service.price }}</td>
+                    <td>
+                        {% if service.status == 'Pending' %}
+                            <span class="status-pending">Pending</span>
+                        {% elif service.status == 'Approved' %}
+                            <span class="status-approved">Approved</span>
+                        {% elif service.status == 'Rejected' %}
+                            <span class="status-rejected">Rejected</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if service.status == 'Approved' or service.status == 'Rejected' %}
+                        {{service.admin_comments}}
+                        {%endif%}
+                        {% if service.status == 'Pending' %}
+                        <p>Action on your request is pending</p>
+                        {%endif%}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center">No services found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="text-center mt-4">
+            <a href="{% url 'sellers:post_service' %}" class="btn btn-green">Post a New Service</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

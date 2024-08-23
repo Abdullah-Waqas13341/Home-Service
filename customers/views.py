@@ -80,11 +80,29 @@ def services_list(request):
 
 @login_required
 def booked_services(request):
-    bookings=Booking.objects.filter(customer=request.user.customer)
+    # Fetch all bookings for the logged-in customer
+    bookings = Booking.objects.filter(customer=request.user.customer)
     
+    # Loop through bookings and attach payment details
     for booking in bookings:
+        try:
+            # Get the payment associated with the booking
+            payment = Payment.objects.get(booking=booking)
+            booking.payment_status = payment.payment_status
+            booking.save()
+            print("eee",booking.payment_status)
+
+        except Payment.DoesNotExist:
+            # If no payment exists for the booking, set default values
+            booking.payment_status = 'Unpaid'
+          
+        
+        # Add the payment URL for each booking
         booking.payment_url = reverse('customers:payment_view', args=[booking.id])
-    return render(request, 'customers/booked_services.html', {'bookings': bookings})    
+
+    return render(request, 'customers/booked_services.html', {'bookings': bookings})
+
+   
 
 
 
@@ -104,16 +122,20 @@ def payment_view(request, booking_id):
                     amount=int(amount * 100),  
                     currency='pkr',
                     description='Payment for Booking ID {}'.format(booking_id),
-                    source=request.POST['stripeToken']
+                    source=request.POST['stripeToken'],
+                    
                 )
                 
                 
-                Payment.objects.create(
+                payment= Payment.objects.create(
                     amount=amount,
                     stripe_charge_id=charge.id,
-                    booking=booking  
+                    booking=booking ,
+                    
+                     
                 )
-                
+                payment.payment_status = 'paid'
+                payment.save()
                 messages.success(request, 'Payment successful!')
                 return redirect('customers:payment_success')
             except stripe.error.StripeError as e:

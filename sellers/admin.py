@@ -9,5 +9,6 @@ class CategoryAdmin(admin.ModelAdmin):
 @admin.register(Service)
 class ServiceAdmin(admin.ModelAdmin):
     list_display = ['seller', 'category', 'title', 'price', 'status', 'avg_rating', 'created_at', 'updated_at']
+admin.site.unregister(Service)
 
 # Register your models here.

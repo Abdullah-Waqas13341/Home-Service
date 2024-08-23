@@ -22,7 +22,7 @@ env = environ.Env()
 environ.Env.read_env()
 
 # Configure maximum login attempts and lockout time
-MAX_LOGIN_ATTEMPTS = env.int('MAX_LOGIN_ATTEMPTS', default=5)  # Default is 5
+MAX_LOGIN_ATTEMPTS = env.int('MAX_LOGIN_ATTEMPTS')  # Default is 5
 LOCKOUT_TIME = env.int('LOCKOUT_TIME', default=300)  # Default is 300 seconds (5 minutes)
 
 

@@ -26,6 +26,7 @@
 
     <div class="row">
         {% for service in page_obj %}
+        {% if service.status == 'Approved' %}
         <div class="col-md-4 mb-4">
             <a href="/customers/services/{{service.id}}" style="text-decoration: none; color: black;">
                 <div class="card shadow-sm border-success">
@@ -40,6 +41,7 @@
                 </div>
             </a>
         </div>
+        {% endif %}
         {% empty %}
         <p class="text-center">No services available for the selected category.</p>
         {% endfor %}

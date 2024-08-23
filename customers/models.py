@@ -11,9 +11,10 @@ class Booking(models.Model):
     time = models.TimeField()
     service_date = models.DateField()
     address = models.TextField()
-    status = models.CharField(max_length=20, default='Pending',choices=[('Pending', 'Pending'), ('Approved', 'Approved'), ('Cancelld', 'Cancelld')])
+    status = models.CharField(max_length=20, default='Pending',choices=[('acceped', 'Accepted'), ('declined', 'Declined')])
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    payment_status = models.CharField(max_length=20, default='Unpaid', choices=[('paid', 'Paid'), ('pending', 'Pending'), ('unpaid', 'Unpaid')])
     class Meta:
         ordering = ['-created_at']
     def __str__(self):
@@ -26,13 +27,11 @@ class Payment(models.Model):
     payment_date = models.DateTimeField(auto_now_add=True)
     stripe_charge_id = models.CharField(max_length=100, blank=True, null=True)
     PAYMENT_STATUS_CHOICES = [
-        ('Pending', 'Pending'),
-        ('Approved', 'Approved'),
-        ('Cancelled', 'Cancelled'),
-        ('Failed', 'Failed'),
-        ('Refunded', 'Refunded'),
+        ('paid', 'Paid'),
+        ('pending', 'Pending'),
+        ('unpaid', 'Unpaid'),
     ]
-    payment_status = models.CharField(max_length=20, default='Pending', choices=PAYMENT_STATUS_CHOICES)
+    payment_status = models.CharField(max_length=20, default='Unpaid', choices=PAYMENT_STATUS_CHOICES)
     PAYMENT_MODE_CHOICES = [
  \
         ('Card', 'Card'),

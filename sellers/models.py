@@ -16,10 +16,15 @@ class Service(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField()
     price = models.FloatField()
-    status = models.CharField(max_length=20, default='Pending',choices=[('Available', 'Available'), ('Not Available', 'Not Available')])
+    status = models.CharField(max_length=20, default='Pending',choices= [
+        ('Pending', 'Pending'),
+        ('Approved', 'Approved'),
+        ('Rejected', 'Rejected'),
+    ])
     avg_rating = models.FloatField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    admin_comments = models.TextField(blank=True, null=True)
     
     class Meta:
         ordering = ['-created_at']

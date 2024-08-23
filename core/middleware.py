@@ -26,6 +26,7 @@ class RoleBasedRedirectMiddleware:
                 allowed_urls = [
                     reverse('seller:services'),
                     reverse('seller:post_service'),
+                    reverse('seller:list_services'),
                 ]
 
                 if not any(request.path.startswith(url) for url in allowed_urls):
