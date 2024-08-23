@@ -11,7 +11,7 @@ import datetime
 
 def custom_login(request):
     if request.method == 'POST':
-        form = CustomAuthenticationForm(request, data=request.POST)
+        form = CustomAuthenticationForm(request.POST)
         email = request.POST.get('email')
 
         # Check if the account is locked
@@ -59,6 +59,7 @@ def custom_login(request):
         form = CustomAuthenticationForm()
 
     return render(request, 'core/login.html', {'form': form})
+
 
 def custom_logout(request):
     logout(request)
