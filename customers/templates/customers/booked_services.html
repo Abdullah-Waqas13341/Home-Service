@@ -9,6 +9,7 @@
                 <th>Date</th>
                 <th>Time</th>
                 <th>Status</th>
+                <th>Progress</th>
                 <th>Action</th>
                 <th>Payment Status</th>
             </tr>
@@ -27,6 +28,15 @@
                     <span class="badge bg-danger">Declined</span>
                     {% else %}
                     <span class="badge bg-warning text-dark">Pending</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {%if booking.progress == 'Completed' %}
+                   <p class="badge bg-success"> {{booking.progress}} </p>
+                    {% elif booking.progress == 'On-going' %}
+                    <p class="badge bg-info text-dark" style="color: black;"> {{booking.progress}} </p>
+                    {% else %}
+                    <p class="badge bg-warning text-warning text-dark"> {{booking.progress}} </p>
                     {% endif %}
                 </td>
                 <td>
@@ -50,6 +60,7 @@
                     <span class="badge bg-warning text-dark">Unpaid</span>
                     {% endif %}
                 </td>
+
             </tr>
             {% endfor %}
         </tbody>

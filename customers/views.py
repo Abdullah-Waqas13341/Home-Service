@@ -12,7 +12,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 
-@login_required
+@login_required(login_url='core:login')
 def service_detail(request, service_id):
     service = get_object_or_404(Service, id=service_id)
     booking_created = request.GET.get('booking_created', False)== 'True'
@@ -57,7 +57,7 @@ def service_detail(request, service_id):
     })
 
 
-@login_required
+@login_required(login_url='core:login')
 def services_list(request):
     selected_category = request.GET.get('category')
     
@@ -78,7 +78,7 @@ def services_list(request):
         'selected_category': selected_category
     })
 
-@login_required
+@login_required(login_url='core:login')
 def booked_services(request):
     # Fetch all bookings for the logged-in customer
     bookings = Booking.objects.filter(customer=request.user.customer)
@@ -108,7 +108,7 @@ def booked_services(request):
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
-@login_required
+@login_required(login_url='core:login')
 def payment_view(request, booking_id):
     booking = get_object_or_404(Booking, id=booking_id)
 

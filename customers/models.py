@@ -12,6 +12,7 @@ class Booking(models.Model):
     service_date = models.DateField()
     address = models.TextField()
     status = models.CharField(max_length=20, default='Pending',choices=[('acceped', 'Accepted'), ('declined', 'Declined')])
+    progress = models.CharField(max_length=20, default='Pending',choices=[('completed', 'Completed'), ('on-going', 'On-going'), ('pending', 'Pending')])
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     payment_status = models.CharField(max_length=20, default='Unpaid', choices=[('paid', 'Paid'), ('pending', 'Pending'), ('unpaid', 'Unpaid')])
