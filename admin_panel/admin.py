@@ -40,9 +40,9 @@ class ServiceAdmin(admin.ModelAdmin):
 
 # admin_panel/admin.py
 
-class MyAdminSite(admin.AdminSite):
+class MyAdminSite(AdminSite):
     site_header = "Admin Dashboard"
-    login_template = 'admin/login.html'
+
     def get_urls(self):
         urls = super().get_urls()
         custom_urls = [
@@ -110,7 +110,7 @@ class MyAdminSite(admin.AdminSite):
 admin_site = MyAdminSite(name='myadmin')
 
 admin_site.register(Service, ServiceAdmin)
-admin_site.register(Category)
+
 # Register your models here
 admin_site.register(Admin, AdminAdmin)
 admin_site.register(AdminAction, AdminActionAdmin)

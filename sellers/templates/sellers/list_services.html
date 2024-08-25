@@ -13,6 +13,7 @@
                     <th scope="col">Price</th>
                     <th scope="col">Status</th>
                     <th scope="col">Admin Comments</th>
+                    <th scope="col">Actions</th> <!-- Added Actions column -->
                 </tr>
             </thead>
             <tbody>
@@ -39,10 +40,16 @@
                         <p>Action on your request is pending</p>
                         {%endif%}
                     </td>
+                    <td>
+                        {% if service.status == 'Rejected' %}
+                        <!-- Request Review anchor tag -->
+                        <a href="{% url 'sellers:request_review' service.id %}" class="btn btn-sm btn-warning">Request Review</a>
+                        {% endif %}
+                    </td>
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="5" class="text-center">No services found.</td>
+                    <td colspan="6" class="text-center">No services found.</td> <!-- Updated colspan to 6 -->
                 </tr>
                 {% endfor %}
             </tbody>

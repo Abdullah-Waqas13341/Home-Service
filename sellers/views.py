@@ -3,6 +3,7 @@ from .forms import ServiceForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import Service 
+from admin_panel.models import AdminAction
 from customers.models import Booking
 @login_required(login_url='core:login')
 def services(request):
@@ -66,5 +67,28 @@ def complete_booking(request, booking_id):
     booking.progress = 'Completed'
     booking.save()
     return redirect('sellers:booked_services')
+
+@login_required(login_url='core:login')
+def request_review(request, service_id):
+    # Get the service that the seller wants to request a review for
+    service=Service.objects.get(id=service_id)
+
+    # Ensure the service status is "Rejected" and the request is from the correct user
     
+
+    if service.status == 'Rejected' and service.seller == request.user.seller:
+        # Update the service status back to "Pending Review"
+        service.status = 'Pending'
+        service.save()
+
+        
+
+        messages.success(request, 'Review requested successfully. The admin will review your service.')
+
+    else:
+        messages.error(request, 'You are not allowed to request a review for this service.')
+
+    # Redirect back to the seller's service page (or any appropriate page)
+    return redirect('sellers:list_services')
+ 
 # Create your views here.
