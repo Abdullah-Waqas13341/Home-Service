@@ -14,14 +14,14 @@ def custom_login(request):
         form = CustomAuthenticationForm(request.POST)
         email = request.POST.get('email')
 
-        # Check if the account is locked
+       
         lockout_time = cache.get(f'lockout_time_{email}')
         if lockout_time and timezone.now() < lockout_time:
             remaining_time = int((lockout_time - timezone.now()).total_seconds())
             messages.error(request, f'Your account is locked. Please try again in {remaining_time} seconds.')
             return render(request, 'core/login.html', {'form': form})
 
-        # Check failed attempts before processing the form
+       
         failed_attempts = cache.get(f'failed_attempts_{email}', 0)
         if failed_attempts >= settings.MAX_LOGIN_ATTEMPTS:
             lockout_time = timezone.now() + datetime.timedelta(seconds=settings.LOCKOUT_TIME)
@@ -32,10 +32,9 @@ def custom_login(request):
         if form.is_valid():
             password = form.cleaned_data.get('password')
 
-            # Authenticate the user
             user = authenticate(request, email=email, password=password)
             if user is not None:
-                # Successful login, clear failed attempts and lockout time
+            
                 cache.delete(f'failed_attempts_{email}')
                 cache.delete(f'lockout_time_{email}')
 
@@ -43,7 +42,7 @@ def custom_login(request):
                 messages.success(request, f"Welcome back, {user.username}!")
                 return redirect('core:home')
             else:
-                # Failed login attempt, increase failed attempts count
+                
                 failed_attempts += 1
                 cache.set(f'failed_attempts_{email}', failed_attempts, timeout=settings.LOCKOUT_TIME)
 
@@ -81,15 +80,9 @@ def signup(request):
 
 
 
-
-# core/views.py
-
-
 def home(request):
     
     return render(request, 'core/home.html')
 
 
 
-
-# Create your views here.
