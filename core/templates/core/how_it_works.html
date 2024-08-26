@@ -1,0 +1,106 @@
+{% extends 'core/base.html' %}
+{% block content %}
+<!-- Hero Section -->
+<div class="jumbotron text-center text-white" style="background-color: #2ecc71; padding: 100px 0;">
+    <h1 class="display-4">How It Works</h1>
+    <p class="lead">Discover how you can easily avail services and grow your business with our platform</p>
+</div>
+
+<!-- About Section -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="section-title text-center mb-4">About</h2>
+        <div class="content-section shadow-sm p-4 rounded" style="background-color: #f9f9f9;">
+            <p class="text-muted">Our home service application connects customers and service providers seamlessly. Customers can browse and book services like cleaning, electrical work, plumbing, painting, and more. Sellers can easily register their services and manage them through their personalized dashboard. Admins oversee the services, approving or rejecting new services while ensuring quality and reliability.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Registration and Authorization Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="section-title text-center mb-4">Registration and Authorization</h2>
+        <div class="row">
+            <div class="col-md-4 text-center">
+                <div class="icon mb-3" style="font-size: 40px; color: #27ae60;">&#128100;</div>
+                <h5>Customer</h5>
+                <p class="text-muted">Register, book services, and manage your bookings effortlessly.</p>
+            </div>
+            <div class="col-md-4 text-center">
+                <div class="icon mb-3" style="font-size: 40px; color: #27ae60;">&#128188;</div>
+                <h5>Seller</h5>
+                <p class="text-muted">Register, add services, and manage them through your personalized dashboard.</p>
+            </div>
+            <div class="col-md-4 text-center">
+                <div class="icon mb-3" style="font-size: 40px; color: #27ae60;">&#128101;</div>
+                <h5>Admin</h5>
+                <p class="text-muted">Oversee and manage the platform, approve or reject services.</p>
+            </div>
+        </div>
+        <div class="mt-4">
+            <p class="text-center text-muted">Users can register with their name, gender, age, email, password, and role (Customer or Seller). Admins are added by default. Login is email-based, and after 5 incorrect login attempts, accounts are locked for 5 minutes.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Customer Dashboard Section -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="section-title text-center mb-4">Customer Dashboard</h2>
+        <div class="content-section shadow-sm p-4 rounded" style="background-color: #f9f9f9;">
+            <ul class="list-unstyled text-muted">
+                <li><i class="fas fa-check-circle text-success"></i> View all available services</li>
+                <li><i class="fas fa-check-circle text-success"></i> Sort services by date</li>
+                <li><i class="fas fa-check-circle text-success"></i> Search services by category</li>
+                <li><i class="fas fa-check-circle text-success"></i> View detailed information on each service</li>
+                <li><i class="fas fa-check-circle text-success"></i> Book services</li>
+                <li><i class="fas fa-check-circle text-success"></i> Rate and review services after availing them</li>
+                <li><i class="fas fa-check-circle text-success"></i> Make payments via Stripe</li>
+                <li><i class="fas fa-check-circle text-success"></i> View ongoing and completed services</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- Admin Dashboard Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="section-title text-center mb-4">Admin Dashboard</h2>
+        <div class="content-section shadow-sm p-4 rounded" style="background-color: #f9f9f9;">
+            <ul class="list-unstyled text-muted">
+                <li><i class="fas fa-check-circle text-success"></i> Manage service categories (Add/Delete)</li>
+                <li><i class="fas fa-check-circle text-success"></i> Approve or reject newly added services</li>
+                <li><i class="fas fa-check-circle text-success"></i> Provide reasons for rejection</li>
+                <li><i class="fas fa-check-circle text-success"></i> View lists of approved, rejected, and pending services</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- Seller Dashboard Section -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="section-title text-center mb-4">Seller Dashboard</h2>
+        <div class="content-section shadow-sm p-4 rounded" style="background-color: #f9f9f9;">
+            <ul class="list-unstyled text-muted">
+                <li><i class="fas fa-check-circle text-success"></i> View all services posted by you</li>
+                <li><i class="fas fa-check-circle text-success"></i> Check the status of each service (pending, approved, rejected)</li>
+                <li><i class="fas fa-check-circle text-success"></i> Resolve admin comments on rejected services and request re-approval</li>
+                <li><i class="fas fa-check-circle text-success"></i> Register new services</li>
+                <li><i class="fas fa-check-circle text-success"></i> View reviews submitted for your services</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- Footer Section -->
+<footer class="footer text-white text-center py-4" style="background-color: #27ae60;">
+    <div class="container">
+        <p class="mb-0">&copy; 2024 Home Service Application. All rights reserved.</p>
+    </div>
+</footer>
+
+<!-- FontAwesome for icons -->
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+{% endblock %}

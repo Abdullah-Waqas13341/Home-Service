@@ -12,7 +12,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 
-@login_required
+@login_required(login_url='core:login')
 def service_detail(request, service_id):
     service = get_object_or_404(Service, id=service_id)
     booking_created = request.GET.get('booking_created', False)== 'True'
@@ -36,61 +36,109 @@ def service_detail(request, service_id):
         booking_form = BookingForm()
 
     
+   
+
+    return render(request, 'customers/service_detail.html', {
+        'service': service,
+        'booking_form': booking_form,
+        'booking_created': booking_created,
+        'booking': booking,  
+    })
+
+
+@login_required(login_url='core:login')
+def review_form(request, service_id):
+    service = get_object_or_404(Service, id=service_id)
+    
+    # Find the most recent booking for this service and customer
+    booking = Booking.objects.filter(
+        service=service,
+        customer=request.user.customer
+    ).order_by('-created_at').first()
+
+    if not booking:
+        messages.error(request, 'You need to book this service before leaving a review.')
+        return redirect('customers:service_detail', service_id=service.id)
+
     if request.method == 'POST' and 'submit_review' in request.POST:
         review_form = ReviewForm(request.POST)
         if review_form.is_valid():
             review = review_form.save(commit=False)
             review.customer = request.user.customer
             review.service = service
+            review.booking = booking
             review.save()
             messages.success(request, 'Your review has been submitted.')
             return redirect('customers:service_detail', service_id=service.id)
     else:
         review_form = ReviewForm()
 
-    return render(request, 'customers/service_detail.html', {
-        'service': service,
-        'booking_form': booking_form,
+    context = {
         'review_form': review_form,
-        'booking_created': booking_created,
-        'booking': booking,  
-    })
-
-
-@login_required
+        'service': service,
+        'booking': booking
+    }
+    return render(request, 'customers/review_form.html', context)
+@login_required(login_url='core:login')
 def services_list(request):
     selected_category = request.GET.get('category')
-    
-    if selected_category:
-        services = Service.objects.filter(category__id=selected_category)
-    else:
-        services = Service.objects.all()
-    
-    categories = Category.objects.all()
+    sort_order = request.GET.get('sort_order', 'desc')  
 
-    paginator = Paginator(services, 6) 
+    
+    services = Service.objects.filter(status='Approved')
+    if selected_category:
+        services = services.filter(category_id=selected_category)
+
+    
+    if sort_order == 'asc':
+        services = services.order_by('created_at')
+    else:
+        services = services.order_by('-created_at')
+
+   
+    paginator = Paginator(services, 6)  
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
+   
+    categories = Category.objects.all()
+
     return render(request, 'customers/services_list.html', {
-        'page_obj': page_obj,   
+        'page_obj': page_obj,
         'categories': categories,
-        'selected_category': selected_category
+        'selected_category': int(selected_category) if selected_category else None,
+        'sort_order': sort_order,
     })
 
-@login_required
+@login_required(login_url='core:login')
 def booked_services(request):
-    bookings=Booking.objects.filter(customer=request.user.customer)
+
+    bookings = Booking.objects.filter(customer=request.user.customer)
     
+
     for booking in bookings:
+        try:
+  
+            payment = Payment.objects.get(booking=booking)
+            booking.payment_status = payment.payment_status
+            booking.save()
+            print("eee",booking.payment_status)
+
+        except Payment.DoesNotExist:
+         
+            booking.payment_status = 'Unpaid'
+          
         booking.payment_url = reverse('customers:payment_view', args=[booking.id])
-    return render(request, 'customers/booked_services.html', {'bookings': bookings})    
+
+    return render(request, 'customers/booked_services.html', {'bookings': bookings})
+
+   
 
 
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
-@login_required
+@login_required(login_url='core:login')
 def payment_view(request, booking_id):
     booking = get_object_or_404(Booking, id=booking_id)
 
@@ -104,16 +152,20 @@ def payment_view(request, booking_id):
                     amount=int(amount * 100),  
                     currency='pkr',
                     description='Payment for Booking ID {}'.format(booking_id),
-                    source=request.POST['stripeToken']
+                    source=request.POST['stripeToken'],
+                    
                 )
                 
                 
-                Payment.objects.create(
+                payment= Payment.objects.create(
                     amount=amount,
                     stripe_charge_id=charge.id,
-                    booking=booking  
+                    booking=booking ,
+                    
+                     
                 )
-                
+                payment.payment_status = 'paid'
+                payment.save()
                 messages.success(request, 'Payment successful!')
                 return redirect('customers:payment_success')
             except stripe.error.StripeError as e:

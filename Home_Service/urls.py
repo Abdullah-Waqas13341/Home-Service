@@ -17,6 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path,include
 from core import urls,views
+from django.contrib import admin
+from admin_panel.admin import admin_site
 
 
 
@@ -24,9 +26,12 @@ from core import urls,views
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin/', admin_site.urls),
+    # path('admin/', admin.site.urls),
     path('', include('core.urls', namespace='core')),
     path('customers/', include('customers.urls', namespace='customers')),
+    path('sellers/',include('sellers.urls', namespace='sellers')),
+    
  
 ]
 

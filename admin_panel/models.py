@@ -1,6 +1,6 @@
 from django.db import models
 from core.models import User
-
+from django.conf import settings
 from core.models import User
 
 class Admin(User):
@@ -23,7 +23,7 @@ class Admin(User):
 
 
 class AdminAction(models.Model):
-    admin= models.ForeignKey(Admin, on_delete=models.CASCADE)
+    admin = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     ACTION_CHOICES = [('Approve', 'Approve'), ('Reject', 'Reject'), ('Pending', 'Pending')]
     action = models.CharField(max_length=10, choices=ACTION_CHOICES)
     reason = models.TextField()

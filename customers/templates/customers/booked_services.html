@@ -9,7 +9,9 @@
                 <th>Date</th>
                 <th>Time</th>
                 <th>Status</th>
+                <th>Progress</th>
                 <th>Action</th>
+                <th>Payment Status</th>
             </tr>
         </thead>
         <tbody>
@@ -19,22 +21,51 @@
                 <td>{{ booking.service_date }}</td>
                 <td>{{ booking.time }}</td>
                 <td>
-                    {% if booking.status == 'Pending' %}
-                    <span class="badge bg-warning text-dark">Pending</span>
+                    {% if booking.status == 'Accepted' %}
+                    <span class="badge bg-success text-dark">Accepted</span>
+                    
+                    {% elif booking.status == 'Declined' %}
+                    <span class="badge bg-danger">Declined</span>
                     {% else %}
-                    <span class="badge bg-success">Paid</span>
+                    <span class="badge bg-warning text-dark">Pending</span>
                     {% endif %}
                 </td>
                 <td>
-                    {% if booking.status == 'Pending' %}
-                    <form action="{% url 'customers:payment_view' booking.id %}" method="POST">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-success">Pay Now</button>
-                    </form>
+                    {% if booking.progress == 'Completed' %}
+                        <p class="badge bg-success">{{ booking.progress }}</p><br>
+                        {% if booking.review_set.exists %}
+                            <p class="text-muted">Review already given</p>
+                        {% else %}
+                            <a class="btn btn-success btn-sm" href="{% url 'customers:review_form' booking.service.id %}">Give a Review</a>
+                        {% endif %}
+                    {% elif booking.progress == 'On-going' %}
+                        <p class="badge bg-info text-dark" style="color: black;">{{ booking.progress }}</p>
                     {% else %}
-                    <button class="btn btn-success" disabled>Paid</button>
+                        <p class="badge bg-warning text-warning text-dark">{{ booking.progress }}</p>
                     {% endif %}
                 </td>
+                <td>
+                    {% if booking.status == 'Accepted' %}
+                    <form action="{% url 'customers:payment_view' booking.id %}" method="POST">
+                        {% csrf_token %}
+                        {%if booking.payment_status == 'paid'%}
+                        <button type="submit" class="btn btn-success" disabled>Payed</button>
+                        {% else %}
+                        <button type="submit" class="btn btn-success">Pay Now</button>
+                        {% endif %}
+                    </form>
+                    {% elif  booking.status == 'Declined'%}
+                    <button class="btn btn-success" disabled>Seller Declined</button>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if booking.payment_status == 'paid' %}
+                    <span class="badge bg-success text-dark">Paid</span>
+                    {% else %}
+                    <span class="badge bg-warning text-dark">Unpaid</span>
+                    {% endif %}
+                </td>
+
             </tr>
             {% endfor %}
         </tbody>

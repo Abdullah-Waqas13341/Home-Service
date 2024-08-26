@@ -1,0 +1,26 @@
+{% extends 'sellers/base.html' %}
+{% block content %}
+<div class="container">
+    <div class="guideline-container">
+        <h2 class="text-center">Welcome, Seller!</h2>
+        <p>
+            As a seller on our platform, you can showcase your services to a wide range of customers. 
+            Here are a few things you need to know before posting a service:
+        </p>
+        <ul>
+            <li>Ensure that your service fits into one of the pre-assigned categories.</li>
+            <li>Provide a clear and concise title and description of your service.</li>
+            <li>Set a competitive price for your service.</li>
+            <li>Once submitted, your service will be reviewed by the admin before being published.</li>
+        </ul>
+        <p>
+            Once your service is approved, it will be visible to potential customers. You can also manage your 
+            services and update them as needed. If your service is rejected, you'll receive feedback to help you improve it.
+        </p>
+        <div class="text-center mt-4">
+            <a href="{% url 'sellers:post_service' %}" class="btn btn-green btn-lg">Post a New Service</a>
+            <a href="{% url 'sellers:list_services' %}" class="btn btn-green btn-lg">View Posted Services</a>
+            <a href="{% url 'sellers:booked_services' %}" class="btn btn-green btn-lg">View Booked Services</a>
+            
+        </div>
+{% endblock %}

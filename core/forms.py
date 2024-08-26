@@ -3,17 +3,31 @@ from django.contrib.auth.forms import UserCreationForm
 from .models import User
 from sellers.models import Seller
 from customers.models import Customer
-
-
+from django.contrib.auth import authenticate
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 class CustomAuthenticationForm(AuthenticationForm):
-    email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'form-control custom-input', 'placeholder': 'Email'}))
-    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control custom-input', 'placeholder': 'Password'}))
+    username = forms.EmailField(label='Email', widget=forms.EmailInput(attrs={'autofocus': True}))
 
-    class Meta:
-        model = User
-        fields = ['email', 'password']
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['username'].label = 'Email'
+
+    def clean(self): 
+        email = self.cleaned_data.get('username')
+        password = self.cleaned_data.get('password')
+
+        if email and password:
+            self.user_cache = authenticate(self.request, email=email, password=password)
+            if self.user_cache is None:
+                raise forms.ValidationError('Invalid email or password.')
+            else:
+                self.confirm_login_allowed(self.user_cache)
+
+        return self.cleaned_data
 
 
 

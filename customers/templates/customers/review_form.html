@@ -1,0 +1,17 @@
+<!-- customer/templates/customer/review_form.html -->
+
+{% extends "customers/base.html" %}
+
+{% block title %}Submit Review{% endblock %}
+
+{% block content %}
+<h3 class="mt-4 text-success">Give a Rating</h3>
+<form method="post">
+    {% csrf_token %}
+    {{ review_form.as_p }}
+    <button type="submit" name="submit_review" class="btn btn-success">Submit Review</button>
+
+    
+</form>
+{% endblock %}
+

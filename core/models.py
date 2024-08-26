@@ -13,9 +13,5 @@ class User(AbstractUser):
 
 
 
-# Create your models here.
 
 
-
-
-# Create your models here.
