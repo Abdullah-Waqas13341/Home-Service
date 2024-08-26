@@ -26,8 +26,8 @@ from admin_panel.admin import admin_site
 
 
 urlpatterns = [
-    path('admin/', admin_site.urls),
-    # path('superadmin/', admin.site.urls),
+    # path('admin/', admin_site.urls),
+    path('admin/', admin.site.urls),
     path('', include('core.urls', namespace='core')),
     path('customers/', include('customers.urls', namespace='customers')),
     path('sellers/',include('sellers.urls', namespace='sellers')),

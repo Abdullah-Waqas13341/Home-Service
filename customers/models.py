@@ -50,6 +50,7 @@ class Payment(models.Model):
 class Review(models.Model):
     customer= models.ForeignKey(Customer, on_delete=models.CASCADE)
     service= models.ForeignKey(Service, on_delete=models.CASCADE)
+    booking= models.ForeignKey(Booking, on_delete=models.CASCADE,null=True, blank=True)
     rating = models.IntegerField()
     review = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)

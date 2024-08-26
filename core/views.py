@@ -11,18 +11,17 @@ import datetime
 
 def custom_login(request):
     if request.method == 'POST':
-        form = CustomAuthenticationForm(request.POST)
+        form = CustomAuthenticationForm(request, data=request.POST)
         email = request.POST.get('email')
 
-       
         lockout_time = cache.get(f'lockout_time_{email}')
         if lockout_time and timezone.now() < lockout_time:
             remaining_time = int((lockout_time - timezone.now()).total_seconds())
             messages.error(request, f'Your account is locked. Please try again in {remaining_time} seconds.')
             return render(request, 'core/login.html', {'form': form})
 
-       
         failed_attempts = cache.get(f'failed_attempts_{email}', 0)
+
         if failed_attempts >= settings.MAX_LOGIN_ATTEMPTS:
             lockout_time = timezone.now() + datetime.timedelta(seconds=settings.LOCKOUT_TIME)
             cache.set(f'lockout_time_{email}', lockout_time, timeout=settings.LOCKOUT_TIME)
@@ -30,36 +29,31 @@ def custom_login(request):
             return render(request, 'core/login.html', {'form': form})
 
         if form.is_valid():
-            password = form.cleaned_data.get('password')
-
-            user = authenticate(request, email=email, password=password)
+            user = form.get_user()
             if user is not None:
-            
                 cache.delete(f'failed_attempts_{email}')
                 cache.delete(f'lockout_time_{email}')
-
                 login(request, user)
                 messages.success(request, f"Welcome back, {user.username}!")
                 return redirect('core:home')
-            else:
-                
-                failed_attempts += 1
-                cache.set(f'failed_attempts_{email}', failed_attempts, timeout=settings.LOCKOUT_TIME)
 
-                if failed_attempts >= settings.MAX_LOGIN_ATTEMPTS:
-                    lockout_time = timezone.now() + datetime.timedelta(seconds=settings.LOCKOUT_TIME)
-                    cache.set(f'lockout_time_{email}', lockout_time, timeout=settings.LOCKOUT_TIME)
-                    messages.error(request, f'Account locked due to too many failed attempts. Try again in {settings.LOCKOUT_TIME} seconds.')
-                else:
-                    messages.error(request, f'Invalid email or password. {settings.MAX_LOGIN_ATTEMPTS - failed_attempts} attempts remaining.')
+        # If we reach here, authentication has failed
+        failed_attempts += 1
+        cache.set(f'failed_attempts_{email}', failed_attempts, timeout=24 * 60 * 60)  # 24 hours timeout
+
+        if failed_attempts >= settings.MAX_LOGIN_ATTEMPTS:
+            lockout_time = timezone.now() + datetime.timedelta(seconds=settings.LOCKOUT_TIME)
+            cache.set(f'lockout_time_{email}', lockout_time, timeout=settings.LOCKOUT_TIME)
+            messages.error(request, f'Account locked due to too many failed attempts. Try again in {settings.LOCKOUT_TIME} seconds.')
         else:
-            messages.error(request, 'Invalid email or password.')
+            messages.error(request, f'Invalid email or password. {settings.MAX_LOGIN_ATTEMPTS - failed_attempts} attempts remaining.')
+
     else:
         form = CustomAuthenticationForm()
 
     return render(request, 'core/login.html', {'form': form})
 
-
+    return render(request, 'core/login.html', {'form': form})
 def custom_logout(request):
     logout(request)
     print("Logout view called") 
@@ -80,9 +74,12 @@ def signup(request):
 
 
 
+
 def home(request):
     
     return render(request, 'core/home.html')
 
 
 
+
+# Create your views here.

@@ -36,27 +36,54 @@ def service_detail(request, service_id):
         booking_form = BookingForm()
 
     
+   
+
+    return render(request, 'customers/service_detail.html', {
+        'service': service,
+        'booking_form': booking_form,
+        'booking_created': booking_created,
+        'booking': booking,  
+    })
+
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404, redirect, render
+from django.contrib import messages
+from .models import Service, Review, Booking
+from .forms import ReviewForm
+
+@login_required(login_url='core:login')
+def review_form(request, service_id):
+    service = get_object_or_404(Service, id=service_id)
+    
+    # Find the most recent booking for this service and customer
+    booking = Booking.objects.filter(
+        service=service,
+        customer=request.user.customer
+    ).order_by('-created_at').first()
+
+    if not booking:
+        messages.error(request, 'You need to book this service before leaving a review.')
+        return redirect('customers:service_detail', service_id=service.id)
+
     if request.method == 'POST' and 'submit_review' in request.POST:
         review_form = ReviewForm(request.POST)
         if review_form.is_valid():
             review = review_form.save(commit=False)
             review.customer = request.user.customer
             review.service = service
+            review.booking = booking
             review.save()
             messages.success(request, 'Your review has been submitted.')
             return redirect('customers:service_detail', service_id=service.id)
     else:
         review_form = ReviewForm()
 
-    return render(request, 'customers/service_detail.html', {
-        'service': service,
-        'booking_form': booking_form,
+    context = {
         'review_form': review_form,
-        'booking_created': booking_created,
-        'booking': booking,  
-    })
-
-
+        'service': service,
+        'booking': booking
+    }
+    return render(request, 'customers/review_form.html', context)
 @login_required(login_url='core:login')
 def services_list(request):
     selected_category = request.GET.get('category')

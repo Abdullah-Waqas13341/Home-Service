@@ -1,4 +1,6 @@
 {% extends 'sellers/base.html' %}
+{% load custom_filters %}
+
 {% block content %}
 <div class="container mt-5">
     <h2 class="text-center text-success mb-4">Booked Services</h2>
@@ -13,57 +15,60 @@
                 <th>Status</th>
                 <th>Progress</th>
                 <th>Actions</th>
+                <th>Review</th>
             </tr>
         </thead>
         <tbody>
             {% for booking in bookings %}
             <tr>
-                <td>{{booking.customer}}</td>
+                <td>{{ booking.customer }}</td>
                 <td>{{ booking.service.title }}</td>
                 <td>{{ booking.service_date }}</td>
                 <td>{{ booking.time }}</td>
                 <td>{{ booking.address }}</td>
                 <td>
                     {% if booking.service.status == 'Approved' %}
-                        <p class="badge bg-success">Accepted by Admin</p>
+                    <p class="badge bg-success">Accepted by Admin</p>
                     {% elif booking.service.status == 'Pending' %}
-                        <p class="badge bg-warning text-dark">Pending</p>
+                    <p class="badge bg-warning text-dark">Pending</p>
                     {% elif booking.service.status == 'Rejected' %}
-                        <p class="badge bg-danger">Declined by Admin</p>
+                    <p class="badge bg-danger">Declined by Admin</p>
                     {% else %}
-                        <p class="badge bg-secondary">{{ booking.status }}</p>
+                    <p class="badge bg-secondary">{{ booking.status }}</p>
                     {% endif %}
                 </td>
                 <td>
+                    {% if booking.service.status == 'Approved' %}
                     {% if booking.progress == 'Completed' %}
-                        <p class="badge bg-success">Completed</p>
+                    <p class="badge bg-success">Completed</p>
                     {% elif booking.progress == 'On-going' %}
-                        <p class="badge bg-info">Ongoing</p>
+                    <p class="badge bg-info">Ongoing</p>
                     {% elif booking.progress == 'Pending' %}
-                        <p class="badge bg-warning text-dark">Pending</p>
+                    <p class="badge bg-warning text-dark">Pending</p>
                     {% else %}
-                        <p class="badge bg-secondary">{{ booking.progress }}</p>
+                    <p class="badge bg-secondary">{{ booking.progress }}</p>
+                    {% endif %}
                     {% endif %}
                 </td>
                 <td>
-                    {% if booking.status == 'Pending' and  booking.service.status == 'Approved' %}
+                    {% if booking.status == 'Pending' and booking.service.status == 'Approved' %}
                     <a href="{% url 'sellers:accept_booking' booking.id %}" class="btn btn-success btn-sm">Accept</a>
                     <a href="{% url 'sellers:decline_booking' booking.id %}" class="btn btn-danger btn-sm">Decline</a>
-                    {% elif booking.status == 'Accepted' and  booking.service.status == 'Approved' %}
+                    {% elif booking.status == 'Accepted' and booking.service.status == 'Approved' %}
                     <p class="text-primary font-weight-bold">Status: Accepted the Booking</p>
                     {% if booking.progress != 'Completed' %}
-                    <a href="{% url 'sellers:complete_booking' booking.id %}" class="btn btn-success btn-sm mt-2">Mark
-                        Progress as Completed</a>
-                    {%elif booking.progress == 'Completed'%}
+                    <a href="{% url 'sellers:complete_booking' booking.id %}" class="btn btn-success btn-sm mt-2">Mark Progress as Completed</a>
+                    {% elif booking.progress == 'Completed' %}
                     <p class="text-success font-weight-bold">Progress: Completed</p>
                     {% endif %}
-                    
-                    {% elif booking.status == 'Declined' and  booking.service.status == 'Approved' %}
+
+                    {% elif booking.status == 'Declined' and booking.service.status == 'Approved' %}
                     <p class="text-danger font-weight-bold">Status: Declined</p>
-
-                    {% endif %}
-
-
+                    {% endif %} 
+                </td>
+                <td>
+                    <!-- Display the review associated with this booking -->
+                    {{ reviews_dict|get_item:booking.id|default:"No review available" }}
                 </td>
             </tr>
             {% endfor %}

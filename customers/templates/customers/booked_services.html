@@ -32,7 +32,8 @@
                 </td>
                 <td>
                     {%if booking.progress == 'Completed' %}
-                   <p class="badge bg-success"> {{booking.progress}} </p>
+                   <p class="badge bg-success"> {{booking.progress}} </p><br>
+                   <a class="btn btn-success btn-sm" href="{% url 'customers:review_form' booking.service.id %}">Give a Review</a>
                     {% elif booking.progress == 'On-going' %}
                     <p class="badge bg-info text-dark" style="color: black;"> {{booking.progress}} </p>
                     {% else %}
