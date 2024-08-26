@@ -35,23 +35,24 @@ def list_services(request):
     services = Service.objects.filter(seller=request.user.seller)
     return render(request, 'sellers/list_services.html', {'services': services})
 @login_required(login_url='core:login')
+
+
 def booked_services(request):
+    # Get all bookings for the current seller
     bookings = Booking.objects.filter(service__seller=request.user.seller).order_by('-created_at')
     
-    reviews_dict = {}
+    # Get all reviews for these bookings
+    reviews = Review.objects.filter(booking__in=bookings)
     
-    for booking in bookings:
-        # Get the review specifically for this booking
-        review = Review.objects.filter(booking=booking).first()
-        
-        if review:
-            reviews_dict[booking.id] = review.review
-        else:
-            reviews_dict[booking.id] = None
-        
-        print(f"Booking ID: {booking.id}, Service: {booking.service.title}, Review: {reviews_dict[booking.id] if reviews_dict[booking.id] else 'No review'}")
+    # Create a dictionary mapping booking IDs to their reviews
+    reviews_dict = {review.booking.id: review.review for review in reviews}
     
-    return render(request, 'sellers/booked_services.html', {'bookings': bookings, 'reviews_dict': reviews_dict})
+    # Create a list of tuples with (booking, associated review or None)
+    bookings_reviews = [(booking, reviews_dict.get(booking.id)) for booking in bookings]
+    
+    # Pass the list to the template context
+    return render(request, 'sellers/booked_services.html', {'bookings_reviews': bookings_reviews})
+
 
 
 

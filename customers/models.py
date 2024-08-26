@@ -1,13 +1,15 @@
 from django.db import models
 from core.models import User
 from sellers.models import Service
-
+from datetime import date
+from django.core.exceptions import ValidationError
+from django.utils import timezone
 class Customer(User):
     pass
 class Booking(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     service = models.ForeignKey(Service, on_delete=models.CASCADE)
-    date = models.DateField()
+    date = models.DateField(default=date.today)
     time = models.TimeField()
     service_date = models.DateField()
     address = models.TextField()
@@ -20,7 +22,6 @@ class Booking(models.Model):
         ordering = ['-created_at']
     def __str__(self):
         return self.service.title
-    
 class Payment(models.Model):
    
     booking = models.OneToOneField(Booking, on_delete=models.CASCADE)

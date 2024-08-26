@@ -21,13 +21,16 @@ class AdminActionAdmin(admin.ModelAdmin):
 def approve_services(modeladmin, request, queryset):
     queryset.update(status='Approved')
     for service in queryset:
-        AdminAction.objects.create(service=service, action='Approved')
+        service.status = 'Approved'
+        service.save()
+
     modeladmin.message_user(request, "Selected services have been approved.")
 
 def reject_services(modeladmin, request, queryset):
     queryset.update(status='Rejected')
     for service in queryset:
-        AdminAction.objects.create(service=service, action='Rejected')
+        service.status = 'Rejected'
+        service.save()
     modeladmin.message_user(request, "Selected services have been rejected.")
 
 approve_services.short_description = "Approve selected services"
@@ -42,6 +45,7 @@ class ServiceAdmin(admin.ModelAdmin):
 
 class MyAdminSite(AdminSite):
     site_header = "Admin Dashboard"
+   
 
     def get_urls(self):
         urls = super().get_urls()
@@ -110,7 +114,7 @@ class MyAdminSite(AdminSite):
 admin_site = MyAdminSite(name='myadmin')
 
 admin_site.register(Service, ServiceAdmin)
-
+admin_site.register(Category)
 # Register your models here
-admin_site.register(Admin, AdminAdmin)
-admin_site.register(AdminAction, AdminActionAdmin)
+admin_site.register(Admin)
+

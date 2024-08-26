@@ -31,13 +31,17 @@
                     {% endif %}
                 </td>
                 <td>
-                    {%if booking.progress == 'Completed' %}
-                   <p class="badge bg-success"> {{booking.progress}} </p><br>
-                   <a class="btn btn-success btn-sm" href="{% url 'customers:review_form' booking.service.id %}">Give a Review</a>
+                    {% if booking.progress == 'Completed' %}
+                        <p class="badge bg-success">{{ booking.progress }}</p><br>
+                        {% if booking.review_set.exists %}
+                            <p class="text-muted">Review already given</p>
+                        {% else %}
+                            <a class="btn btn-success btn-sm" href="{% url 'customers:review_form' booking.service.id %}">Give a Review</a>
+                        {% endif %}
                     {% elif booking.progress == 'On-going' %}
-                    <p class="badge bg-info text-dark" style="color: black;"> {{booking.progress}} </p>
+                        <p class="badge bg-info text-dark" style="color: black;">{{ booking.progress }}</p>
                     {% else %}
-                    <p class="badge bg-warning text-warning text-dark"> {{booking.progress}} </p>
+                        <p class="badge bg-warning text-warning text-dark">{{ booking.progress }}</p>
                     {% endif %}
                 </td>
                 <td>

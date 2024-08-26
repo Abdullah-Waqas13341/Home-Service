@@ -19,7 +19,7 @@
             </tr>
         </thead>
         <tbody>
-            {% for booking in bookings %}
+            {% for booking, review in bookings_reviews %}
             <tr>
                 <td>{{ booking.customer }}</td>
                 <td>{{ booking.service.title }}</td>
@@ -67,8 +67,8 @@
                     {% endif %} 
                 </td>
                 <td>
-                    <!-- Display the review associated with this booking -->
-                    {{ reviews_dict|get_item:booking.id|default:"No review available" }}
+                    <!-- Display the review associated with this booking, or leave blank if no review -->
+                    {{ review|default:"" }}
                 </td>
             </tr>
             {% endfor %}

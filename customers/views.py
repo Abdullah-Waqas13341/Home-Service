@@ -45,11 +45,6 @@ def service_detail(request, service_id):
         'booking': booking,  
     })
 
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_object_or_404, redirect, render
-from django.contrib import messages
-from .models import Service, Review, Booking
-from .forms import ReviewForm
 
 @login_required(login_url='core:login')
 def review_form(request, service_id):
@@ -87,44 +82,52 @@ def review_form(request, service_id):
 @login_required(login_url='core:login')
 def services_list(request):
     selected_category = request.GET.get('category')
-    
-    if selected_category:
-        services = Service.objects.filter(category__id=selected_category)
-    else:
-        services = Service.objects.all()
-    
-    categories = Category.objects.all()
+    sort_order = request.GET.get('sort_order', 'desc')  
 
-    paginator = Paginator(services, 6) 
+    
+    services = Service.objects.filter(status='Approved')
+    if selected_category:
+        services = services.filter(category_id=selected_category)
+
+    
+    if sort_order == 'asc':
+        services = services.order_by('created_at')
+    else:
+        services = services.order_by('-created_at')
+
+   
+    paginator = Paginator(services, 6)  
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
+   
+    categories = Category.objects.all()
+
     return render(request, 'customers/services_list.html', {
-        'page_obj': page_obj,   
+        'page_obj': page_obj,
         'categories': categories,
-        'selected_category': selected_category
+        'selected_category': int(selected_category) if selected_category else None,
+        'sort_order': sort_order,
     })
 
 @login_required(login_url='core:login')
 def booked_services(request):
-    # Fetch all bookings for the logged-in customer
+
     bookings = Booking.objects.filter(customer=request.user.customer)
     
-    # Loop through bookings and attach payment details
+
     for booking in bookings:
         try:
-            # Get the payment associated with the booking
+  
             payment = Payment.objects.get(booking=booking)
             booking.payment_status = payment.payment_status
             booking.save()
             print("eee",booking.payment_status)
 
         except Payment.DoesNotExist:
-            # If no payment exists for the booking, set default values
+         
             booking.payment_status = 'Unpaid'
           
-        
-        # Add the payment URL for each booking
         booking.payment_url = reverse('customers:payment_view', args=[booking.id])
 
     return render(request, 'customers/booked_services.html', {'bookings': bookings})

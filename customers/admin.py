@@ -5,11 +5,11 @@ class CustomerAdmin(admin.ModelAdmin):
     list_display = ['username', 'email']
 @admin.register(Booking)
 class BookingAdmin(admin.ModelAdmin):
-    list_display = ['customer', 'service', 'date', 'time', 'service_date', 'status','progress','payment_status']
+    list_display = ['id','customer', 'service', 'date', 'time', 'service_date', 'status','progress','payment_status']
 @admin.register(Payment)
 class PaymentAdmin(admin.ModelAdmin):
     list_display = ['booking', 'amount', 'payment_date', 'payment_status', 'payment_mode']
 @admin.register(Review)
 class ReviewAdmin(admin.ModelAdmin):
-    list_display = ['customer', 'service', 'rating', 'review']
+    list_display = ['id','booking','customer', 'service', 'rating', 'review']
 # Register your models here.
