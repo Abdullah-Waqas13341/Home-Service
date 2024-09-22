@@ -49,8 +49,6 @@ def service_detail(request, service_id):
 @login_required(login_url='core:login')
 def review_form(request, service_id):
     service = get_object_or_404(Service, id=service_id)
-    
-    # Find the most recent booking for this service and customer
     booking = Booking.objects.filter(
         service=service,
         customer=request.user.customer
