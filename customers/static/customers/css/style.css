@@ -1,0 +1,171 @@
+/* customer/static/customer/css/styles.css */
+
+
+body {
+    background-color: #e9f5e9; /* Light green background */
+}
+
+.navbar {
+    margin-bottom: 20px;
+}
+
+.card {
+    border-radius: 10px;
+    border: none;
+}
+
+.card-body {
+    background-color: #ffffff; /* White background for the card */
+    border-radius: 10px;
+    padding: 1rem;
+}
+
+h2 {
+    color: #28a745; /* Bootstrap success color */
+    font-weight: bold;
+}
+
+.btn-success {
+    background-color: #28a745; /* Bootstrap success color */
+    border-color: #28a745;
+}
+
+.btn-success:hover {
+    background-color: #218838; /* Darker green on hover */
+    border-color: #1e7e34;
+}
+
+.form-control {
+    border-radius: 5px;
+    border: 1px solid #ced4da;
+    padding: 0.75rem 1.25rem;
+    font-size: 1rem;
+}
+
+.form-control:focus {
+    border-color: #80e0a0;
+    box-shadow: 0 0 0 0.2rem rgba(72, 182, 89, 0.25);
+}
+
+.navbar-brand {
+    font-weight: bold;
+}
+
+.form-control {
+    border-radius: 0.25rem;
+    border: 1px solid #ced4da;
+}
+
+.form-control:focus {
+    border-color: #28a745;
+    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+}
+
+.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+}
+
+.text-success {
+    color: #28a745 !important;
+}
+
+.alert-container {
+margin-top: 20px;
+}
+
+.alert-success {
+background-color: #d4edda;
+border-color: #c3e6cb;
+color: #155724;
+}
+
+.alert-success .close {
+color: #155724;
+}
+
+.alert-dismissible .close {
+padding: 0.75rem 1.25rem;
+margin: -0.75rem -1.25rem -0.75rem auto;
+}
+
+.alert-dismissible .close {
+cursor: pointer;
+}
+
+.card {
+    border-radius: 10px;
+    border: 2px solid #28a745;
+    /* Green border */
+}
+
+.card-body {
+    background-color: #ffffff;
+    /* White background for the card */
+    border-radius: 10px;
+}
+
+.card-title {
+    color: #28a745;
+    /* Bootstrap success color */
+    font-weight: bold;
+}
+
+.btn-success {
+    background-color: #28a745;
+    /* Bootstrap success color */
+    border-color: #28a745;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+    /* Darker green on hover */
+    border-color: #1e7e34;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+li a{
+    color: black;
+}
+
+.custom-table {
+    border: 2px solid #28a745; /* Green border for the entire table */
+    border-radius: 5px; /* Rounded corners for the table */
+}
+
+.custom-table th, .custom-table td {
+    border: 1px solid #28a745; /* Green border for table cells */
+}
+
+.custom-table thead th {
+    background-color: #28a745; /* Green background for table header */
+    color: white; /* White text color */
+    text-align: center;
+    font-weight: bold;
+}
+
+.custom-table tbody tr:hover {
+    background-color: #e9f5e0; /* Light green background on row hover */
+}
+
+.custom-table .btn {
+    transition: background-color 0.3s ease;
+}
+
+.custom-table .btn:hover {
+    background-color: #9fbea6; /* Darker green on button hover */
+}
+
+.custom-table .badge {
+    font-size: 0.9rem; /* Slightly smaller font size for badges */
+}

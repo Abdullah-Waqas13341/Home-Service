@@ -1,0 +1,91 @@
+
+body {
+    font-family: Arial, sans-serif;
+}
+.navbar-brand {
+    font-weight: bold;
+    color: #4CAF50 !important;
+}
+.btn-success {
+    background-color: #4CAF50;
+    border-color: #4CAF50;
+}
+.hero-section {
+    padding: 50px 0;
+}
+.service-card {
+    margin-bottom: 20px;
+}
+.stats {
+    background-color: #4CAF50;
+    color: white;
+    padding: 20px 0;
+}
+.stats h2 {
+    font-size: 3rem;
+    font-weight: bold;
+
+}
+
+.guideline-container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #ffffff; /* White background */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.btn-green {
+    background-color: #4CAF50;
+    color: white;
+}
+.btn-green:hover {
+    background-color: #45a049;
+}
+
+
+
+
+
+.form-container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #ffffff; /* White background for the form */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.btn-green {
+    background-color: #4CAF50;
+    color: white;
+}
+.btn-green:hover {
+    background-color: #45a049;
+}
+
+
+
+.table-container {
+    max-width: 900px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #ffffff; /* White background */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.btn-green {
+    background-color: #4CAF50;
+    color: white;
+}
+.btn-green:hover {
+    background-color: #45a049;
+}
+.status-pending {
+    color: #ffc107;
+}
+.status-approved {
+    color: #28a745;
+}
+.status-rejected {
+    color: #dc3545;
+}
