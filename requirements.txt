@@ -12,4 +12,6 @@ python-decouple==3.8
 python-dotenv==1.1.1
 stripe==12.4.0
 sympy==1.14.0
-
+gunicorn
+whitenoise[brotli]
+dj-database-url
