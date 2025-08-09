@@ -13,7 +13,9 @@
                     <th scope="col">Price</th>
                     <th scope="col">Status</th>
                     <th scope="col">Admin Comments</th>
-                    <th scope="col">Actions</th> <!-- Added Actions column -->
+                    <th scope="col">Actions</th> <!-- Admin actions only -->
+                    <th scope="col">Availability</th> <!-- Shown only if Approved -->
+                    <th scope="col">Remove</th>
                 </tr>
             </thead>
             <tbody>
@@ -23,6 +25,8 @@
                     <td>{{ service.title }}</td>
                     <td>{{ service.category.name }}</td>
                     <td>{{ service.price }}</td>
+
+                    <!-- Status with colored text -->
                     <td>
                         {% if service.status == 'Pending' %}
                             <span class="status-pending">Pending</span>
@@ -32,30 +36,57 @@
                             <span class="status-rejected">Rejected</span>
                         {% endif %}
                     </td>
+
+                    <!-- Dynamic color for Admin Comments -->
                     <td>
-                        {% if service.status == 'Approved' or service.status == 'Rejected' %}
-                        {{service.admin_comments}}
-                        {%endif%}
-                        {% if service.status == 'Pending' %}
-                        <p>Action on your request is pending</p>
-                        {%endif%}
+                        {% if service.status == 'Approved' %}
+                            <p class="status-approved">{{ service.admin_comments }}</p>
+                        {% elif service.status == 'Rejected' %}
+                            <p class="status-rejected">{{ service.admin_comments }}</p>
+                        {% else %}
+                            <p class="status-pending">Action on your request is pending</p>
+                        {% endif %}
                     </td>
+
+                    <!-- Admin-only action: Request Review -->
                     <td>
                         {% if service.status == 'Rejected' %}
-                        <!-- Request Review anchor tag -->
-                        <a href="{% url 'sellers:request_review' service.id %}" class="btn btn-sm btn-warning">Request Review</a>
+                            <a href="{% url 'seller:request_review' service.id %}" class="btn btn-sm btn-warning">Request Review</a>
                         {% endif %}
+                    </td>
+
+                    <!-- Availability toggle: only visible if service is Approved -->
+                    <td>
+                        {% if service.status == 'Approved' %}
+                        <form method="post" action="{% url 'seller:toggle_availability' service.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm {% if service.availability == 'Available' %}btn-success{% else %}btn-secondary{% endif %}">
+                                {{ service.availability }}
+                            </button>
+                        </form>
+                        {% else %}
+                            <span class="text-muted">N/A</span>
+                        {% endif %}
+                    </td>
+
+                    <!-- Delete service -->
+                    <td>
+                        <form method="post" action="{% url 'seller:delete_service' service.id %}" onsubmit="return confirm('Are you sure you want to delete this service?');">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                        </form>
                     </td>
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="6" class="text-center">No services found.</td> <!-- Updated colspan to 6 -->
+                    <td colspan="9" class="text-center">No services found.</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
+
         <div class="text-center mt-4">
-            <a href="{% url 'sellers:post_service' %}" class="btn btn-green">Post a New Service</a>
+            <a href="{% url 'seller:post_service' %}" class="btn btn-green">Post a New Service</a>
         </div>
     </div>
 </div>

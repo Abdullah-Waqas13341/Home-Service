@@ -19,20 +19,19 @@ from django.urls import path,include
 from core import urls,views
 from django.contrib import admin
 from admin_panel.admin import admin_site
-
-
+from django.contrib.auth.views import LogoutView
+from django.urls import reverse_lazy
 
 
 
 
 urlpatterns = [
-    path('admin/', admin_site.urls),
+    path('admin/logout/', LogoutView.as_view(next_page=reverse_lazy('core:home')), name='admin-logout'),
+    path('admin/',admin_site.urls),
     # path('admin/', admin.site.urls),
     path('', include('core.urls', namespace='core')),
     path('customers/', include('customers.urls', namespace='customers')),
-    path('sellers/',include('sellers.urls', namespace='sellers')),
-    
- 
+    path('sellers/', include('sellers.urls', namespace='sellers')),
 ]
 
     

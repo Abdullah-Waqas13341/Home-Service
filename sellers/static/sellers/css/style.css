@@ -1,21 +1,63 @@
-
 body {
     font-family: Arial, sans-serif;
 }
+
+/* Brand */
 .navbar-brand {
     font-weight: bold;
     color: #4CAF50 !important;
 }
-.btn-success {
+
+/* Global Button Styles */
+.btn-success,
+.btn-green {
     background-color: #4CAF50;
     border-color: #4CAF50;
+    color: white;
 }
+.btn-success:hover,
+.btn-green:hover {
+    background-color: #45a049;
+    border-color: #45a049;
+    color: white;
+}
+
+/* Custom Button for Toggle and Delete */
+.btn-toggle {
+    background-color: #17a2b8;
+    color: white;
+    border: none;
+}
+.btn-toggle:hover {
+    background-color: #138496;
+}
+
+.btn-delete {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+}
+.btn-delete:hover {
+    background-color: #c82333;
+}
+
+/* Spacing between buttons */
+.action-buttons form {
+    display: inline-block;
+    margin-right: 5px;
+}
+
+/* Hero section */
 .hero-section {
     padding: 50px 0;
 }
+
+/* Card spacing */
 .service-card {
     margin-bottom: 20px;
 }
+
+/* Stats section */
 .stats {
     background-color: #4CAF50;
     color: white;
@@ -24,68 +66,56 @@ body {
 .stats h2 {
     font-size: 3rem;
     font-weight: bold;
-
 }
 
+/* Guidelines container */
 .guideline-container {
     max-width: 800px;
     margin: 50px auto;
     padding: 20px;
-    background-color: #ffffff; /* White background */
+    background-color: #ffffff;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
-.btn-green {
-    background-color: #4CAF50;
-    color: white;
-}
-.btn-green:hover {
-    background-color: #45a049;
-}
 
-
-
-
-
+/* Form container */
 .form-container {
     max-width: 600px;
     margin: 50px auto;
     padding: 20px;
-    background-color: #ffffff; /* White background for the form */
+    background-color: #ffffff;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
-.btn-green {
-    background-color: #4CAF50;
-    color: white;
-}
-.btn-green:hover {
-    background-color: #45a049;
-}
 
-
-
+/* Table container */
 .table-container {
-    max-width: 900px;
+    max-width: 1000px;
     margin: 50px auto;
     padding: 20px;
-    background-color: #ffffff; /* White background */
+    background-color: #ffffff;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
-.btn-green {
-    background-color: #4CAF50;
-    color: white;
-}
-.btn-green:hover {
-    background-color: #45a049;
-}
+
+/* Status indicators */
 .status-pending {
     color: #ffc107;
+    font-weight: bold;
 }
 .status-approved {
     color: #28a745;
+    font-weight: bold;
 }
 .status-rejected {
     color: #dc3545;
+    font-weight: bold;
+}
+
+/* Responsive table button spacing */
+@media screen and (max-width: 768px) {
+    .action-buttons form {
+        display: block;
+        margin: 5px 0;
+    }
 }

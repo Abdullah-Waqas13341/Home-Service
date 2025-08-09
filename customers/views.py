@@ -15,34 +15,35 @@ from django.urls import reverse
 @login_required(login_url='core:login')
 def service_detail(request, service_id):
     service = get_object_or_404(Service, id=service_id)
-    booking_created = request.GET.get('booking_created', False)== 'True'
 
-    booking = None  
+    # ✅ Restrict access if service is not available
+    if service.status != 'Approved' or service.availability != 'Available':
+        messages.error(request, "This service is not available.")
+        return redirect('customers:services_list')
+
+    booking_created = request.GET.get('booking_created', False) == 'True'
+
+    booking = None
     if request.user.is_authenticated:
         booking = Booking.objects.filter(customer=request.user.customer, service=service).first()
-   
+
     if request.method == 'POST' and 'book_service' in request.POST:
         booking_form = BookingForm(request.POST)
         if booking_form.is_valid():
             booking = booking_form.save(commit=False)
-            booking.customer = request.user.customer  
+            booking.customer = request.user.customer
             booking.service = service
             booking.save()
             messages.success(request, 'Your booking has been confirmed.')
-            booking_created = True  
             return redirect(f"{request.path}?booking_created=True")
-  
     else:
         booking_form = BookingForm()
-
-    
-   
 
     return render(request, 'customers/service_detail.html', {
         'service': service,
         'booking_form': booking_form,
         'booking_created': booking_created,
-        'booking': booking,  
+        'booking': booking,
     })
 
 
@@ -80,25 +81,23 @@ def review_form(request, service_id):
 @login_required(login_url='core:login')
 def services_list(request):
     selected_category = request.GET.get('category')
-    sort_order = request.GET.get('sort_order', 'desc')  
+    sort_order = request.GET.get('sort_order', 'desc')
 
-    
-    services = Service.objects.filter(status='Approved')
+    # ✅ Only show approved + available services
+    services = Service.objects.filter(status='Approved', availability='Available')
+
     if selected_category:
         services = services.filter(category_id=selected_category)
 
-    
     if sort_order == 'asc':
         services = services.order_by('created_at')
     else:
         services = services.order_by('-created_at')
 
-   
-    paginator = Paginator(services, 6)  
+    paginator = Paginator(services, 6)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-   
     categories = Category.objects.all()
 
     return render(request, 'customers/services_list.html', {
@@ -107,6 +106,7 @@ def services_list(request):
         'selected_category': int(selected_category) if selected_category else None,
         'sort_order': sort_order,
     })
+
 
 @login_required(login_url='core:login')
 def booked_services(request):

@@ -102,5 +102,25 @@ def request_review(request, service_id):
 
 
     return redirect('sellers:list_services')
+from django.views.decorators.http import require_POST
+
+@require_POST
+@login_required(login_url='core:login')
+def toggle_availability(request, service_id):
+    service = get_object_or_404(Service, id=service_id, seller=request.user.seller)
+    service.availability = 'Not Available' if service.availability == 'Available' else 'Available'
+    service.save()
+    messages.success(request, f"Availability changed to {service.availability}.")
+    return redirect('seller:list_services')
+
+@require_POST
+@login_required(login_url='core:login')
+def delete_service(request, service_id):
+    service = get_object_or_404(Service, id=service_id, seller=request.user.seller)
+    service.delete()
+    messages.success(request, "Service deleted successfully.")
+    return redirect('seller:list_services')
+
+
  
 # Create your views here.
